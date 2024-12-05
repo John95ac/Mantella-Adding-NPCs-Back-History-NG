@@ -65,7 +65,7 @@ extern "C" bool SKSEPluginLoad(const SKSE::LoadInterface* skse) {
 
             // 7. Crear una copia del log en la carpeta SKSE
             std::string logFilePath = documentsPath + "/My Games/Mantella/Mantella-Adding-NPCs-Back-History-NG.log";
-            std::ofstream logFile(logFilePath, std::ios::app);
+            std::ofstream logFile(logFilePath);  // Abrir el archivo en modo de sobrescritura
             if (logFile.is_open()) {
                 auto now = std::chrono::system_clock::now();
                 std::time_t in_time_t = std::chrono::system_clock::to_time_t(now);
