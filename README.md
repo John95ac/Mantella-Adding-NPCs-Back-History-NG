@@ -1,6 +1,4 @@
-> 📜 other templates available at https://github.com/SkyrimScripting/SKSE_Templates
-
-# SKSE "Mantella Adding NPCs Back History NG"
+# 📜 SKSE "Mantella Adding NPCs Back History NG"
 
 It's a simple yet powerful SKSE DLL that manages the character_overrides movements from the Mantella AI mod. It was created with the objective of allowing players and creators to create and share the stories and personalities of NPCs for the Mantella AI mod.
 
