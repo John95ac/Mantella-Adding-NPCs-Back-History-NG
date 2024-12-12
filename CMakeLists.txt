@@ -1,76 +1,52 @@
-# Este archivo configura la "compilación" de este plugin SKSE
-# - cómo compilar el plugin C++ (además de las configuraciones encontradas en CMakePresets.json)
-# - dónde guardar el archivo .dll resultante
-# Se recomienda establecer una versión mínima de CMake.
-# Si usas características de CMake de versiones más recientes, actualiza esto para que coincida.
+# It's recommended to set a minimum CMake version.
+# If you use CMake features from higher versions, update this to match.
 cmake_minimum_required(VERSION 3.21)
 
-# [INICIO establecer_nombre_proyecto]
-# Establece el nombre de tu proyecto. Este será el nombre de tu archivo .dll de SKSE.
-project(Mantella-Adding-NPCs-Back-History-NG VERSION 0.3.0 LANGUAGES CXX)
-# [FIN establecer_nombre_proyecto]
+# Set your project name. This will be the name of your SKSE .dll file.
+project(Mantella-Adding-NPCs-Back-History-NG VERSION 0.7.1 LANGUAGES CXX)
 
-# Define la ruta a CommonLibSSE
-set(COMMONLIBSSE_PATH "E:/001 SKYRIM RESPALDO DEL RESPALDO/001_CODE/GitHub/CommonLibSSE-NG")
+# #
+# YOU DO NOT NEED TO EDIT ANYTHING BELOW HERE
+# #
 
-# Define la ruta a RapidJSON
-set(RAPIDJSON_PATH "E:/001 SKYRIM RESPALDO DEL RESPALDO/001_CODE/GitHub/rapidjson 1.1.0")
-
-# Define la ruta a irrKlang
-set(IRRKLANG_PATH "E:/001 SKYRIM RESPALDO DEL RESPALDO/001_CODE/GitHub/irrKlang-64bit-1.6.0")
-
-# Si no estás usando un gestor de mods, probablemente quieras que el plugin SKSE vaya
-# dentro de la carpeta "Data" de tu Skyrim.
-# Para hacer esto automáticamente, establece la variable de entorno SKYRIM_FOLDER
-# a la ruta de tu carpeta de Skyrim Special Edition
+# If you're not using a mod manager, you probably want the SKSE plugin to go
+# inside of your Skyrim "Data" folder.
+#
+# To do this automatically, set the `SKYRIM_FOLDER` environment variable
+# to the path of your Skyrim Special Edition folder
 if(DEFINED ENV{SKYRIM_FOLDER} AND IS_DIRECTORY "$ENV{SKYRIM_FOLDER}/Data")
     set(OUTPUT_FOLDER "$ENV{SKYRIM_FOLDER}/Data")
 endif()
 
-# Si estás usando Mod Organizer 2 o Vortex, podrías querer que esto vaya dentro
-# de tu carpeta "mods", dentro de una subcarpeta llamada "<tu mod>".
-# Para hacer esto automáticamente, establece la variable de entorno SKYRIM_MODS_FOLDER
-# a la ruta de tu carpeta "mods"
+# If you're using Mod Organizer 2 or Vortex, you might want this to go inside
+# of your "mods" folder, inside of a subfolder named "<your mod>".
+#
+# To do this automatically, set the `SKYRIM_MODS_FOLDER` environment variable
+# to the path of your "mods" folder
 if(DEFINED ENV{SKYRIM_MODS_FOLDER} AND IS_DIRECTORY "$ENV{SKYRIM_MODS_FOLDER}")
     set(OUTPUT_FOLDER "$ENV{SKYRIM_MODS_FOLDER}/${PROJECT_NAME}")
 endif()
 
-# De lo contrario, puedes establecer OUTPUT_FOLDER a cualquier lugar que desees :)
-# set(OUTPUT_FOLDER "C:/ruta/a/cualquier/carpeta")
+# Otherwise, you can set OUTPUT_FOLDER to any place you'd like :)
+# set(OUTPUT_FOLDER "C:/path/to/any/folder")
 
-# Añade CommonLibSSE a tu proyecto
-set(CMAKE_PREFIX_PATH ${COMMONLIBSSE_PATH} ${CMAKE_PREFIX_PATH})
-
-# Añade RapidJSON a tu proyecto
-include_directories(${RAPIDJSON_PATH}/include)
-
-# Añade irrKlang a tu proyecto
-include_directories(${IRRKLANG_PATH}/include)
-link_directories(${IRRKLANG_PATH}/lib/Winx64-visualStudio)
-
-# Añade el directorio src a los directorios de inclusión
-include_directories(${CMAKE_SOURCE_DIR}/src)
-
-# Añade todos los archivos .cpp en el directorio src
-file(GLOB SOURCES "src/*.cpp")
-
-# Configura tu plugin SKSE como un plugin SKSE!
+# Setup your SKSE plugin as an SKSE plugin!
 find_package(CommonLibSSE CONFIG REQUIRED)
-add_commonlibsse_plugin(${PROJECT_NAME} SOURCES ${SOURCES}) # <--- especifica todos los archivos .cpp en src
-target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_23) # <--- usa el estándar C++23
-target_precompile_headers(${PROJECT_NAME} PRIVATE PCH.h) # <--- PCH.h es requerido!
+add_commonlibsse_plugin(${PROJECT_NAME} SOURCES plugin.cpp) # <--- specifies plugin.cpp
+target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_23) # <--- use C++23 standard
+target_precompile_headers(${PROJECT_NAME} PRIVATE PCH.h) # <--- PCH.h is required!
 
-# Enlaza la biblioteca irrKlang
-target_link_libraries(${PROJECT_NAME} PRIVATE irrKlang)
-
-# Cuando tu archivo .dll de SKSE esté compilado, esto copiará automáticamente el .dll en tu carpeta de mods.
-# Solo funciona si configuras DEPLOY_ROOT arriba (o estableces la variable de entorno SKYRIM_MODS_FOLDER)
+# When your SKSE .dll is compiled, this will automatically copy the .dll into your mods folder.
+# Only works if you configure DEPLOY_ROOT above (or set the SKYRIM_MODS_FOLDER environment variable)
 if(DEFINED OUTPUT_FOLDER)
-    # Si especificas una <OUTPUT_FOLDER> (incluyendo a través de variables de entorno)
-    # entonces copiaremos tus archivos de mod en Skyrim o un gestor de mods por ti!
-    # Copia los archivos .dll del plugin SKSE en la carpeta SKSE/Plugins/
+    # If you specify an <OUTPUT_FOLDER> (including via environment variables)
+    # then we'll copy your mod files into Skyrim or a mod manager for you!
+
+    # Copy the SKSE plugin .dll files into the SKSE/Plugins/ folder
     set(DLL_FOLDER "${OUTPUT_FOLDER}/SKSE/Plugins")
-    message(STATUS "Carpeta de salida del plugin SKSE: ${DLL_FOLDER}")
+
+    message(STATUS "SKSE plugin output folder: ${DLL_FOLDER}")
+
     add_custom_command(
         TARGET "${PROJECT_NAME}"
         POST_BUILD
@@ -78,7 +54,8 @@ if(DEFINED OUTPUT_FOLDER)
         COMMAND "${CMAKE_COMMAND}" -E copy_if_different "$<TARGET_FILE:${PROJECT_NAME}>" "${DLL_FOLDER}/$<TARGET_FILE_NAME:${PROJECT_NAME}>"
         VERBATIM
     )
-    # Si realizas una compilación "Debug", también copia el archivo .pdb (para símbolos de depuración)
+
+    # If you perform a "Debug" build, also copy .pdb file (for debug symbols)
     if(CMAKE_BUILD_TYPE STREQUAL "Debug")
         add_custom_command(
             TARGET "${PROJECT_NAME}"
