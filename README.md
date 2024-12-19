@@ -22,6 +22,10 @@ Additionally, on the startup screen, it will generate a maintenance message when
 
 That's all for now.
 
+Mantella Back History NPC generator and mod organizer, explanation English: 'https://youtu.be/_jm4-66uX3A'
+
+Mantella Back History NPC generador y mod organizador, explicación Español: 'https://www.youtube.com/watch?v=8_Y18FlUUDI'
+
 # Acknowledgements
 
 Special thanks to mrowrpurr "https://github.com/SkyrimScripting/SKSE_Template_HelloWorld", who created the tutorial for starting with SKSE. It's an incredible piece of work, really good for beginners. "She forgot to mention downloading GIT, but it's a minor detail. If you follow the tutorial without downloading GIT, you'll have a hard time like I did." This work is based solely on what I learned from her tutorials, and of course, my own contributions. I respect her conduct guidelines and license. Here is everything. Thanks, and if you want to learn how to do it, I recommend looking up her videos—they are good.
