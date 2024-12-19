@@ -22,7 +22,7 @@ Additionally, on the startup screen, it will generate a maintenance message when
 
 That's all for now.
 
-Mantella Back History NPC generator and mod organizer, explanation English: 'https://youtu.be/_jm4-66uX3A'
+Mantella Back History NPC generator and mod organizer, explanation English: 'https://www.youtube.com/watch?v=_jm4-66uX3A'
 
 Mantella Back History NPC generador y mod organizador, explicación Español: 'https://www.youtube.com/watch?v=8_Y18FlUUDI'
 
